@@ -9,6 +9,11 @@ packages = [{include = "home_work19"}]
 [tool.poetry.dependencies]
 python = "^3.12"
 django = "^5.0.6"
+black = "^24.4.2"
+pillow = "^10.4.0"
+psycopg2-binary = "^2.9.9"
+ipython = "^8.26.0"
+static = "^1.1.1"
 
 
 [build-system]
