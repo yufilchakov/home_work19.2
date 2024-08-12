@@ -12,11 +12,11 @@ class Category(models.Model):
         verbose_name="Описание продукта",
         help_text="Введите описание продукта",
     )
-
+    
     class Meta:
         verbose_name = "Категория"
         verbose_name_plural = "Категории"
-
+    
     def __str__(self):
         return self.name
 
@@ -57,11 +57,11 @@ class Product(models.Model):
         verbose_name="Количество просмотров",
         help_text="Укажите количество просмотров",
     )
-
+    
     class Meta:
         verbose_name = "Продукт"
         verbose_name_plural = "Продукты"
-
+    
     def __str__(self):
         return self.name
 
@@ -89,10 +89,11 @@ class Version(models.Model):
         help_text="Укажите, является ли текущая версия",
         default=False,
     )
-
+    
     class Meta:
         verbose_name = "Версия продукта"
         verbose_name_plural = "Версии продуктов"
-      
+    
     def __str__(self):
         return f'{self.product}, {self.version_number}, {self.version_name}, {self.current_version_indicator}'
+    
