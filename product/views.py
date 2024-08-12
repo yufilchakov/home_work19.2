@@ -11,6 +11,18 @@ class ProductListView(ListView):
     """Класс-контроллер для вывода главной страницы"""
     model = Product
     
+    def get_context_data(self, **kwargs):
+        """Метод для вывода названия версии если она активна"""
+        context_data = super().get_context_data(**kwargs)
+        version_data = {}
+        for product in Product.objects.all():
+            for version in Version.objects.all():
+                if version.current_version_indicator:
+                    if version.product_id == int(product.pk):
+                        version_data[version.product_id] = version.version_name
+        context_data['version'] = version_data
+        return context_data
+
 
 class ProductDetailView(DetailView):
     """Класс-контроллер для вывода информации об отдельном продукте"""
@@ -31,9 +43,9 @@ class ProductCreateView(CreateView):
     
     def form_valid(self, form):
         if form.is_valid():
-            new_blog = form.save()
-            new_blog.slug = slugify(new_blog.name)
-            new_blog.save()
+            new_product = form.save()
+            new_product.slug = slugify(new_product.name)
+            new_product.save()
         return super().form_valid(form)
 
 
