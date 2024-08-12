@@ -1,4 +1,4 @@
-from django.forms import ModelForm, BooleanField, forms, BaseInlineFormSet
+from django.forms import ModelForm, BooleanField, forms
 
 from product.models import Product, Version
 
@@ -44,16 +44,4 @@ class VersionForm(StyleFormMixin, ModelForm):
     class Meta:
         model = Version
         fields = '__all__'
-        
-        
-class VersionFormset(StyleFormMixin, BaseInlineFormSet):
-    def clean_count(self):
-        super().clean()
-        count = 0
-        for form in self.forms:
-            if form.instance.current_version_indicator:
-                count += 1
-        if count > 1:
-            raise forms.ValidationError("Может быть только 1 активная версия")
-        return count
     
