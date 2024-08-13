@@ -11,7 +11,7 @@
                     <div class="card-body">
                         <p class="card-text">{{ product.name }}</p>
                         <p class="card-text">{% for version in product.product_versions.all %}
-                            {% if version.is_current_version_indicator == True %}
+                            {% if version.current_version_indicator == True %}
                         <p>Версия: {{version.version_number}} Название: {{version.version_name}}</p>
                         {% endif %}
                         {% endfor %}</p>
