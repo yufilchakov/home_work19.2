@@ -18,7 +18,7 @@ class ProductForm(StyleFormMixin, ModelForm):
     
     class Meta:
         model = Product
-        exclude = ('views',)
+        exclude = ('views', 'owner',)
     
     forbidden_words = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция',
                        'радар']
