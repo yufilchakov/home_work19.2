@@ -163,8 +163,10 @@
       <div class="col-lg-6 col-md-8 mx-auto">
         <h1 class="fw-light">Магазин</h1>
         <p class="lead text-body-secondary">Солнечный</p>
+          {% if user.is_authenticated %}
         <p>
           <a class="btn btn-primary" href="{% url 'product:product_create' %}" role="button">Создать</a>
+            {% endif %}
         </p>
       </div>
     </div>
