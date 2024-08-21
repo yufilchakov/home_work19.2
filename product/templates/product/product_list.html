@@ -14,13 +14,16 @@
                             {% if version.current_version_indicator == True %}
                         <p>Версия: {{version.version_number}} Название: {{version.version_name}}</p>
                         {% endif %}
-                        {% endfor %}</p>
+                        {% endfor %}
+                        </p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
-                                <a class="btn btn-primary" href="{% url 'product:product_detail' product.pk %}"
-                                   role="button">Открыть</a>
+                                {% if perms.product.can_cancel_publication_product and perms.product.can_change_description_product and perms.product.can_change_category_product or user == object.owner%}
                                 <a class="btn btn-primary" href="{% url 'product:product_update' product.pk %}"
                                    role="button">Редактировать</a>
+                                {% endif %}
+                                <a class="btn btn-primary" href="{% url 'product:product_detail' product.pk %}"
+                                   role="button">Открыть</a>
                                 <a class="btn btn-primary" href="{% url 'product:product_delete' product.pk %}"
                                    role="button">Удалить</a>
                             </div>
