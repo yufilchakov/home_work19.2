@@ -38,6 +38,14 @@ class ProductForm(StyleFormMixin, ModelForm):
         return cleaned_data
 
 
+class ProductModeratorForm(StyleFormMixin, ModelForm):
+    """Класс форма для модераторов изменение продуктов"""
+    
+    class Meta:
+        model = Product
+        fields = ('publication', 'description', 'category')
+
+
 class VersionForm(StyleFormMixin, ModelForm):
     """Класс форма для версий"""
     
