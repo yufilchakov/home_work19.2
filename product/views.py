@@ -1,10 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.forms import inlineformset_factory
-from django.utils.text import slugify
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from product.forms import ProductForm, VersionForm
+from product.forms import ProductForm, VersionForm, ProductModeratorForm
 from product.models import Product, Version
 
 
@@ -25,15 +25,17 @@ class ProductListView(ListView):
         return context_data
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(DetailView, LoginRequiredMixin):
     """Класс-контроллер для вывода информации об отдельном продукте"""
     model = Product
     
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
-        self.object.views += 1
-        self.object.save()
-        return self.object
+        if self.request.user == self.object.owner:
+            self.object.views += 1
+            self.object.save()
+            return self.object
+        raise PermissionDenied
 
 
 class ProductCreateView(CreateView, LoginRequiredMixin):
@@ -50,7 +52,7 @@ class ProductCreateView(CreateView, LoginRequiredMixin):
         return super().form_valid(form)
 
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     """Класс-контроллер для редактирования продукта"""
     model = Product
     form_class = ProductForm
@@ -80,6 +82,15 @@ class ProductUpdateView(UpdateView):
             return super().form_valid(form)
         else:
             return self.render_to_response(self.get_context_data(form=form, formset=formset))
+    
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.owner:
+            return ProductForm
+        if user.has_perm('product.can_cancel_publication_product') and user.has_perm(
+                'product.can_change_description_product') and user.has_perm('product.can_change_category_product'):
+            return ProductModeratorForm
+        raise PermissionDenied
 
 
 class ProductDeleteView(DeleteView):
