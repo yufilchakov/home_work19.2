@@ -60,10 +60,18 @@ class Product(models.Model):
         help_text="Укажите количество просмотров",
     )
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name="Пользователь", blank=True, null=True)
+    publication = models.BooleanField(
+        default=False, verbose_name="Опубликовано", help_text="Опубликовать продукт"
+    )
     
     class Meta:
         verbose_name = "Продукт"
         verbose_name_plural = "Продукты"
+        permissions = [
+            ('can_cancel_publication_product', 'Can cancel publication product'),
+            ('can_change_description_product', 'Can change description product'),
+            ('can_change_category_product', 'Can change category product'),
+        ]
     
     def __str__(self):
         return self.name
