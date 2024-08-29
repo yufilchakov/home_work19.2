@@ -5,7 +5,8 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from product.forms import ProductForm, VersionForm, ProductModeratorForm
-from product.models import Product, Version
+from product.models import Product, Version, Category
+from product.services import get_category_from_cache
 
 
 class ProductListView(ListView):
@@ -97,3 +98,13 @@ class ProductDeleteView(DeleteView):
     """Класс-контроллер для удаления продукта"""
     model = Product
     success_url = reverse_lazy('product:product_list')
+
+
+class CategoryListView(ListView):
+    """Класс-контроллер для вывода списка категорий"""
+    model = Category
+    success_url = reverse_lazy('product:category_list')
+    
+    def get_queryset(self):
+        return get_category_from_cache()
+    
